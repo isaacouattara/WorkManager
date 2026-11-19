@@ -3,7 +3,7 @@ package com.workmanager;
 
 import com.workmanager.application.service.UserService;
 import com.workmanager.domain.model.User;
-import com.workmanager.infrastructure.persistence.memory.MemoryUserRepository;
+import com.workmanager.infrastructure.persistence.postgres.PostgresUserRepository;
 
 import java.util.Optional;
 
@@ -12,7 +12,7 @@ public class Main {
     public static void main(String[] args) {
 
         // Création du repository
-        MemoryUserRepository repository = new MemoryUserRepository();
+        PostgresUserRepository repository = new PostgresUserRepository();
 
         // Injection du repertoire dans UserService
         UserService userService = new UserService(repository);
@@ -32,16 +32,16 @@ public class Main {
 
 
         // Recherche par identifiant
-        Optional<User> result = userService.findUserById(user.getId());
+        Optional<User> resultId = userService.findUserById(user.getId());
 
-        if (result.isPresent()){
+        if (resultId.isPresent()){
             System.out.println("Utilisateur retrouvé par ID !");
         }
 
         //Recherche par email
         Optional<User> resultEmail = userService.findUserByEmail(user.getEmail());
 
-        if (result.isPresent()){
+        if (resultEmail.isPresent()){
             System.out.println("Utilisateur retrouvé par email !");
         }
 
