@@ -3,8 +3,10 @@ package com.workmanager.domain.model;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+// Entité métier : un compte utilisateur (table "users").
 public class User {
 
+    // initialisation des valeurs
     private UUID id;
     private String firstName;
     private String lastName;
@@ -12,6 +14,8 @@ public class User {
     private String passwordHash;
     private LocalDateTime createdAt;
 
+    // constructeur pour crée un nouvel utilisateur
+    // (génère l'UUID et la date de création)
     public User(String firstName, String lastName, String email, String passwordHash){
         this(
                 UUID.randomUUID(),
@@ -23,6 +27,8 @@ public class User {
         );
     }
 
+    // constructeur pour restaurer un utilisateur existant
+    // (id et date viennent de la base ; l'e-mail est validé par setEmail)
     public User(UUID id, String firstName, String lastName, String email, String passwordHash, LocalDateTime createdAt){
         this.id = id;
         this.firstName = firstName;
@@ -31,6 +37,7 @@ public class User {
         this.passwordHash = passwordHash;
         this.createdAt = createdAt;
     }
+
 
     public UUID getId() {
 
@@ -61,6 +68,7 @@ public class User {
         return passwordHash;
     }
 
+    // Valide l'e-mail (non vide et contenant "@"), sinon lève IllegalArgumentException
     public void setEmail(String email) {
         if(email == null || email.isBlank() || !email.contains("@")){
             throw new IllegalArgumentException("Adresse email invalide veuillez entrez une adresse mail au bon format");

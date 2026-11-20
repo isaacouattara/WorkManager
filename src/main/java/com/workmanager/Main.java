@@ -7,6 +7,7 @@ import com.workmanager.infrastructure.persistence.postgres.PostgresUserRepositor
 
 import java.util.Optional;
 
+// Point d'entrée : choisit le repository, l'injecte dans le service et teste les fonctions.
 public class Main {
 
     public static void main(String[] args) {
@@ -18,10 +19,11 @@ public class Main {
         UserService userService = new UserService(repository);
 
         // Création et enregistrement d'un utilisateur
+        // (le 4e argument est une valeur fictive, pas un vrai hash BCrypt)
             User user = userService.createUser(
                     "Isaac",
                     "ouattara",
-                    "isaac@example.com",
+                    "kris@exemple.com",
                     "empreinte_securisee"
             );
 
@@ -31,7 +33,7 @@ public class Main {
             System.out.println("Email :"+ user.getEmail());
 
 
-        // Recherche par identifiant
+        // Recherche par identifiant (Optional : le résultat peut être absent)
         Optional<User> resultId = userService.findUserById(user.getId());
 
         if (resultId.isPresent()){
