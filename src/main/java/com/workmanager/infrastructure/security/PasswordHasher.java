@@ -1,29 +1,30 @@
 package com.workmanager.infrastructure.security;
 
-import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-// Hachage et vérification des mots de passe avec BCrypt (un hash n'est pas réversible).
+// Hachage et vérification des mots de passe avec BCrypt (implémentation Spring Security).
 public class PasswordHasher {
 
-     // Transforme un mot de passe en hash BCrypt à stocker en base
-     public String hashPassword(String password){
+    // Coût 12 : même niveau que précédemment (le sel aléatoire est géré automatiquement)
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
-         if (password == null || password.isBlank()){
-             throw new IllegalArgumentException("Le mot de passe ne peut être vide");
-         }
+    // Transforme un mot de passe en hash BCrypt à stocker en base
+    public String hashPassword(String password) {
 
-         // gensalt(12) : sel aléatoire + coût 12 (plus c'est élevé, plus c'est lent à attaquer)
-         return BCrypt.hashpw(password, BCrypt.gensalt(12));
-     }
+        if (password == null || password.isBlank()) {
+            throw new IllegalArgumentException("Le mot de passe ne peut être vide");
+        }
 
-     // Compare un mot de passe saisi au hash enregistré ; false si incorrect ou null
-     public boolean verify(String password, String hashedPassword){
+        return encoder.encode(password);
+    }
 
-         if (password == null || hashedPassword == null){
-             return false;
-         }
+    // Compare un mot de passe saisi au hash enregistré ; false si l'un des deux est null
+    public boolean verify(String password, String hashedPassword) {
 
-         return BCrypt.checkpw(password, hashedPassword);
-     }
+        if (password == null || hashedPassword == null) {
+            return false;
+        }
 
+        return encoder.matches(password, hashedPassword);
+    }
 }
