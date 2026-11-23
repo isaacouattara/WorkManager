@@ -37,6 +37,8 @@ build/
 !src/test/**/build/
 
 ### VS Code ###
+.idea/
+*.iml
 .vscode/
 
 ### Mac OS ###
