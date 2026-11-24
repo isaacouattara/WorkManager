@@ -1,19 +1,14 @@
 package com.workmanager.domain.repository;
 
 import com.workmanager.domain.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 import java.util.UUID;
 
 // Contrat d'accès aux utilisateurs : dit ce qu'on peut faire, pas comment.
-public interface UserRepository {
-
-    // Enregistre un utilisateur
-    void save(User user);
-
-    // Recherche par UUID
-    Optional<User> findById(UUID id);
+public interface UserRepository extends JpaRepository<User, UUID> {
 
     // Recherche par e-mail
-    Optional<User> findByEmail(String email);
+    Optional<User> findByEmailIgnoreCase(String email);
 }

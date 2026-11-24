@@ -41,7 +41,7 @@ public class UserService {
 
     // Recherche par email (Optional vide si introuvable)
     public Optional<User> findUserByEmail(String email){
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmailIgnoreCase(email);
     }
 
 }

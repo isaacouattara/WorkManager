@@ -1,18 +1,35 @@
 package com.workmanager.domain.model;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 // Entité métier : un compte utilisateur (table "users").
+@Entity
+@Table(name = "users")
 public class User {
 
     // initialisation des valeurs
+
+    @Id
     private UUID id;
+
     private String firstName;
     private String lastName;
+
+    @Column(nullable = false)
     private String email;
+
+    @Column(nullable = false)
     private String passwordHash;
+
+    @Column(nullable = false)
     private LocalDateTime createdAt;
+
+
+    // constructeur sans argument
+    protected User() {}
 
     // constructeur pour crée un nouvel utilisateur
     // (génère l'UUID et la date de création)
