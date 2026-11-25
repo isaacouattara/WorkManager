@@ -3,11 +3,13 @@ package com.workmanager.application.service;
 import com.workmanager.domain.model.User;
 import com.workmanager.domain.repository.UserRepository;
 import com.workmanager.infrastructure.security.PasswordHasher;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java .util.UUID;
 
 // Service applicatif : cas d'utilisation liés aux utilisateurs.
+@Service
 public class UserService {
 
     // Dépend de l'interface, pas d'une implémentation (mémoire ou PostgreSQL)
