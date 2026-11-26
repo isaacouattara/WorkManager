@@ -1,8 +1,10 @@
 package com.workmanager.infrastructure.security;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Component;
 
 // Hachage et vérification des mots de passe avec BCrypt (implémentation Spring Security).
+@Component
 public class PasswordHasher {
 
     // Coût 12 : même niveau que précédemment (le sel aléatoire est géré automatiquement)

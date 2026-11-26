@@ -3,47 +3,43 @@ package com.workmanager.application.service;
 import com.workmanager.domain.model.User;
 import com.workmanager.domain.repository.UserRepository;
 import com.workmanager.infrastructure.security.PasswordHasher;
+import com.workmanager.domain.exception.EmailAlreadyUsedException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-import java .util.UUID;
+import java.util.UUID;
 
-// Service applicatif : cas d'utilisation liés aux utilisateurs.
 @Service
 public class UserService {
 
-    // Dépend de l'interface, pas d'une implémentation (mémoire ou PostgreSQL)
     private final UserRepository userRepository;
-
-    // Hashage du mot de passe
     private final PasswordHasher passwordHasher;
 
-    // Injection de dépendance par le constructeur
-    public UserService(UserRepository userRepository){
+    // Spring injecte les deux beans (un seul constructeur : pas besoin d'@Autowired)
+    public UserService(UserRepository userRepository, PasswordHasher passwordHasher) {
         this.userRepository = userRepository;
-        this.passwordHasher = new PasswordHasher();
+        this.passwordHasher = passwordHasher;
     }
 
-    // Crée un User et l'enregistre (à terme : hacher le mot de passe ici avec PasswordHasher)
-    public User createUser(String firstName, String lastName, String email, String password){
+    // Crée un utilisateur ; refuse un e-mail déjà utilisé (sans tenir compte de la casse)
+    @Transactional
+    public User createUser(String firstName, String lastName, String email, String password) {
+        String cleanEmail = email.trim();
 
-        String passwordHash = passwordHasher.hashPassword(password);
-        User user = new User(firstName, lastName, email, passwordHash);
+        if (userRepository.findByEmailIgnoreCase(cleanEmail).isPresent()) {
+            throw new EmailAlreadyUsedException();
+        }
 
-        userRepository.save(user);
-
-        return user;
-
+        User user = new User(firstName.trim(), lastName.trim(), cleanEmail, passwordHasher.hashPassword(password));
+        return userRepository.save(user);
     }
 
-    // Recherche par identifiant (Optional vide si introuvable)
-    public Optional<User> findUserById(UUID id){
+    public Optional<User> findUserById(UUID id) {
         return userRepository.findById(id);
     }
 
-    // Recherche par email (Optional vide si introuvable)
-    public Optional<User> findUserByEmail(String email){
+    public Optional<User> findUserByEmail(String email) {
         return userRepository.findByEmailIgnoreCase(email);
     }
-
 }
